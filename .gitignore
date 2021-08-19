@@ -1,4 +1,5 @@
-
+/.idea
+/source/
 # Created by https://www.toptal.com/developers/gitignore/api/laravel,composer,visualstudio,visualstudiocode,virtualenv,dotenv,node
 # Edit at https://www.toptal.com/developers/gitignore?templates=laravel,composer,visualstudio,visualstudiocode,virtualenv,dotenv,node
 

@@ -18,7 +18,7 @@ services:
       dockerfile: ./compose/nginx/Dockerfile
     container_name: nginx
     ports:
-      - "8080:80"
+      - "8082:80"
       # Port for xdebug (ensure this matches the remote_port in the xdebug.ini)
       - "9001:9001"
     volumes:
@@ -58,26 +58,6 @@ services:
     networks:
       - laravel
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    environment:
-      MYSQL_ROOT_PASSWORD: secret
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    restart: always
-    depends_on:
-      - mysql
-    ports:
-    - "8081:80"
-    volumes:
-      - /sessions
-    networks:
-      - laravel
-    links:
-      - mysql
-
   php:
     build:
       context: .
@@ -98,22 +78,14 @@ services:
       dockerfile: ./compose/php/composer/Dockerfile
     container_name: composer
     volumes:
-      - ./source:/var/www/html
-    working_dir: /var/www/html
+      - ./source:/var/www/html/laravel
+    working_dir: /var/www/html/laravel
     depends_on:
       - php
     user: laravel
     networks:
       - laravel
     entrypoint: ['composer', '--ignore-platform-reqs']
-
-  npm:
-    image: node:15.0.1
-    container_name: npm
-    volumes:
-      - ./source:/var/www/html
-    working_dir: /var/www/html
-    entrypoint: ['npm']
 
   artisan:
     build:
@@ -124,8 +96,8 @@ services:
       - ./source:/var/www/html:delegated
     depends_on:
       - mysql
-    working_dir: /var/www/html
+    working_dir: /var/www/html/laravel
     user: laravel
-    entrypoint: ['php', '/var/www/html/artisan']
+    entrypoint: ['php', '/var/www/html/laravel/artisan']
     networks:
       - laravel
